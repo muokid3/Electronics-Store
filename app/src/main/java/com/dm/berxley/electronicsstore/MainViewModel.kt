@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dm.berxley.electronicsstore.domain.sharedprefs.LocalUserManager
+import com.dm.berxley.electronicsstore.presentation.navgraph.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -20,19 +21,29 @@ class MainViewModel @Inject constructor(
 
     var splashCondition by mutableStateOf(false)
         private set
+    var startDestination by mutableStateOf(Screen.AppIntroNavigator.route)
+        private set
+
+    var selectedBottomIndex by mutableStateOf(0)
+        private set
 
     init {
         viewModelScope.launch {
-            localUserManager.readWelcomeScreenDone().onEach { shouldStartFromHome ->
-                if (shouldStartFromHome) {
-                    //set navigator start screen of auth
+            localUserManager.readIsLoggedIn().onEach { isLoggedIn ->
+                if (isLoggedIn) {
+                    //set navigator start screen of home
+                    startDestination = Screen.CoreAppNavigator.route
                 } else {
-                    //set navoigator start screen of wellcome screens
+                    //set navigator start screen of auth and welcome screens
+                    startDestination = Screen.AppIntroNavigator.route
                 }
                 delay(300)
                 splashCondition = true
             }.collect()
         }
+    }
 
+    fun setBottomIndex(index: Int){
+        selectedBottomIndex = index
     }
 }

@@ -4,6 +4,6 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface LocalUserManager {
-    suspend fun saveWelcomeScreenDone()
-    fun readWelcomeScreenDone(): Flow<Boolean>
+    suspend fun saveIsLoggedIn(isLoggedIn: Boolean)
+    fun readIsLoggedIn(): Flow<Boolean>
 }
