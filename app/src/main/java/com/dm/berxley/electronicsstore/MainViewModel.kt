@@ -19,7 +19,7 @@ class MainViewModel @Inject constructor(
     localUserManager: LocalUserManager
 ) : ViewModel() {
 
-    var splashCondition by mutableStateOf(false)
+    var splashCondition by mutableStateOf(true)
         private set
     var startDestination by mutableStateOf(Screen.AppIntroNavigator.route)
         private set
@@ -38,7 +38,7 @@ class MainViewModel @Inject constructor(
                     startDestination = Screen.AppIntroNavigator.route
                 }
                 delay(300)
-                splashCondition = true
+                splashCondition = false
             }.collect()
         }
     }

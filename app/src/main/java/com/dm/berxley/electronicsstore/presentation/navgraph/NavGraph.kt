@@ -9,9 +9,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.dm.berxley.electronicsstore.presentation.account.AccountScreen
+import com.dm.berxley.electronicsstore.presentation.checkout.CheckoutScreen
+import com.dm.berxley.electronicsstore.presentation.home.HomeScreen
 import com.dm.berxley.electronicsstore.presentation.onboarding.intro.IntroScreen
 import com.dm.berxley.electronicsstore.presentation.onboarding.login.LoginScreen
 import com.dm.berxley.electronicsstore.presentation.onboarding.register.RegisterScreen
+import com.dm.berxley.electronicsstore.presentation.search.SearchScreen
 
 @Composable
 fun NavGraph(
@@ -30,15 +34,15 @@ fun NavGraph(
             startDestination = Screen.IntroScreen.route,
             route = Screen.AppIntroNavigator.route
         ) {
-            composable(Screen.IntroScreen.route) { navBackStackEntry ->
+            composable(route = Screen.IntroScreen.route) { navBackStackEntry ->
                 IntroScreen(navController)
             }
 
-            composable(Screen.LoginScreen.route) { navBackStackEntry ->
+            composable(route = Screen.LoginScreen.route) { navBackStackEntry ->
                 LoginScreen(navController)
             }
 
-            composable(Screen.RegisterScreen.route) { navBackStackEntry ->
+            composable(route = Screen.RegisterScreen.route) { navBackStackEntry ->
                 RegisterScreen(navController)
             }
 
@@ -50,20 +54,20 @@ fun NavGraph(
             startDestination = Screen.HomeScreen.route,
             route = Screen.CoreAppNavigator.route
         ) {
-            composable(Screen.HomeScreen.route) { navBackStackEntry ->
-
+            composable(route = Screen.HomeScreen.route) { navBackStackEntry ->
+                HomeScreen()
             }
 
-            composable(Screen.SearchScreen.route) { navBackStackEntry ->
-
+            composable(route = Screen.SearchScreen.route) { navBackStackEntry ->
+                SearchScreen()
             }
 
-            composable(Screen.CheckoutScreen.route) { navBackStackEntry ->
-
+            composable(route = Screen.CheckoutScreen.route) { navBackStackEntry ->
+                CheckoutScreen()
             }
 
-            composable(Screen.AccountScreen.route) { navBackStackEntry ->
-
+            composable(route = Screen.AccountScreen.route) { navBackStackEntry ->
+                AccountScreen()
             }
 
         }
