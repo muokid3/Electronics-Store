@@ -35,11 +35,11 @@ fun NavGraph(
             }
 
             composable(Screen.LoginScreen.route) { navBackStackEntry ->
-                LoginScreen()
+                LoginScreen(navController)
             }
 
             composable(Screen.RegisterScreen.route) { navBackStackEntry ->
-                RegisterScreen()
+                RegisterScreen(navController)
             }
 
         }
