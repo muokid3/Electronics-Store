@@ -26,14 +26,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,10 +61,29 @@ import androidx.navigation.compose.rememberNavController
 import com.dm.berxley.electronicsstore.R
 import com.dm.berxley.electronicsstore.presentation.navgraph.Screen
 import com.dm.berxley.electronicsstore.ui.theme.primaryContainerDark
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(navController: NavController) {
     val viewModel = hiltViewModel<LoginViewModel>()
+    val loginState = viewModel.loginState.collectAsState().value
+
+//    val snackbarHostState = remember {
+//        SnackbarHostState()
+//    }
+//    SnackbarHost(hostState = snackbarHostState)
+
+//    if (loginState.loginFailed) {
+//        LaunchedEffect(key1 = loginState.errorMessage) {
+//            snackbarHostState.showSnackbar(message = loginState.errorMessage, duration = SnackbarDuration.Long)
+//            viewModel.resetError()
+//        }
+//    }
+
+    if (loginState.loginSuccessful){
+        navController.navigate(Screen.CoreAppNavigator.route)
+    }
+
     var email by remember {
         mutableStateOf("")
     }
@@ -99,10 +124,9 @@ fun LoginScreen(navController: NavController) {
             contentDescription = "Logo"
         )
 
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
+        OutlinedTextField(modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
             value = email,
             colors = TextFieldDefaults.colors(
                 focusedTextColor = Color.White,
@@ -117,16 +141,19 @@ fun LoginScreen(navController: NavController) {
             ),
             onValueChange = {
                 email = it
-            }, label = {
+            },
+            label = {
                 Text(color = Color.White, text = "E-Mail")
-            }, singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next, keyboardType = KeyboardType.Email)
+            },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next, keyboardType = KeyboardType.Email
+            )
         )
 
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
+        OutlinedTextField(modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
             value = password,
             onValueChange = {
                 password = it
@@ -152,8 +179,7 @@ fun LoginScreen(navController: NavController) {
                 PasswordVisualTransformation()
             },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
+                keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
             ),
             trailingIcon = {
                 if (showPassword) {
@@ -173,42 +199,30 @@ fun LoginScreen(navController: NavController) {
                         )
                     }
                 }
+            })
+
+        if (loginState.isLoading) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                CircularProgressIndicator(color = Color.White)
             }
-        )
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            CircularProgressIndicator(color = Color.White)
-        }
-
-
-        Button(
-            modifier = Modifier
+        } else {
+            Button(modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.White,
-                contentColor = primaryContainerDark
-            ),
-            shape = RoundedCornerShape(5.dp),
-            onClick = { /*TODO*/ }) {
-            Text(text = "Log In")
-        }
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White, contentColor = primaryContainerDark
+                ),
+                shape = RoundedCornerShape(5.dp),
+                onClick = { viewModel.login(email, password) }) {
+                Text(text = "Log In")
+            }
 
-        TextButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
+
+            TextButton(modifier = Modifier.fillMaxWidth(), onClick = {
                 navController.navigate(Screen.RegisterScreen.route)
             }) {
-            Text(color = Color.White, text = "Don't have an account? Sign up!")
+                Text(color = Color.White, text = "Don't have an account? Sign up!")
+            }
         }
-
-
     }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    LoginScreen(rememberNavController())
 }
