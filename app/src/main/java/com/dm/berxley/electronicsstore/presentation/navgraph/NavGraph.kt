@@ -55,7 +55,7 @@ fun NavGraph(
             route = Screen.CoreAppNavigator.route
         ) {
             composable(route = Screen.HomeScreen.route) { navBackStackEntry ->
-                HomeScreen()
+                HomeScreen(navController)
             }
 
             composable(route = Screen.SearchScreen.route) { navBackStackEntry ->
