@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dm.berxley.electronicsstore.presentation.account.AccountScreen
 import com.dm.berxley.electronicsstore.presentation.category.CategoriesScreen
+import com.dm.berxley.electronicsstore.presentation.category.CategoryItemsScreen
 import com.dm.berxley.electronicsstore.presentation.checkout.CheckoutScreen
 import com.dm.berxley.electronicsstore.presentation.home.HomeScreen
 import com.dm.berxley.electronicsstore.presentation.onboarding.intro.IntroScreen
@@ -61,6 +62,12 @@ fun NavGraph(
 
             composable(route = Screen.CategoriesScreen.route) { navBackStackEntry ->
                 CategoriesScreen(navController)
+            }
+            composable(route = Screen.CategoryDetailsScreen.route) { navBackStackEntry ->
+                val catName = navBackStackEntry.arguments?.getString("catName")
+                catName?.let {
+                    CategoryItemsScreen(catName = catName, navController)
+                }
             }
 
 

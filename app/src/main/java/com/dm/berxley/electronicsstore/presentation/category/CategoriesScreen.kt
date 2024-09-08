@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.dm.berxley.electronicsstore.domain.models.Category
+import com.dm.berxley.electronicsstore.presentation.navgraph.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,6 +80,12 @@ fun CategoriesScreen(navController: NavController) {
             items(categories) { category ->
                 CategoryItem(category = category) {
                     //navigate to the category
+                    navController.navigate(
+                        Screen.CategoryDetailsScreen.route.replace(
+                            "{catName}",
+                            category.categoryName
+                        )
+                    )
                 }
             }
 
@@ -101,10 +108,13 @@ fun CategoryItem(category: Category, onclick: () -> Unit) {
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center) {
+            verticalArrangement = Arrangement.Center
+        ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(start = 18.dp, end = 18.dp)) {
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 18.dp, end = 18.dp)
+            ) {
                 Text(
                     modifier = Modifier.weight(1f),
                     text = category.categoryName,
