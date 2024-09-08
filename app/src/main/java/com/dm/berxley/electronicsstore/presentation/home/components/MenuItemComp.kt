@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.dm.berxley.electronicsstore.presentation.home.MenuItem
+import com.dm.berxley.electronicsstore.domain.models.MenuItem
 
 @Composable
 fun MenuItemComp(menuItem: MenuItem, onClick: () -> Unit) {
