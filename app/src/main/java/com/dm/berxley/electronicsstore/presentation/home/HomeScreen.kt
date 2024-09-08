@@ -31,6 +31,7 @@ import com.dm.berxley.electronicsstore.domain.models.MenuItem
 import com.dm.berxley.electronicsstore.presentation.home.components.BannerItemComp
 import com.dm.berxley.electronicsstore.presentation.home.components.MenuItemComp
 import com.dm.berxley.electronicsstore.presentation.home.components.SaleItemComp
+import com.dm.berxley.electronicsstore.presentation.navgraph.Screen
 import com.dm.berxley.electronicsstore.presentation.onboarding.intro.components.OffersIndicator
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +49,7 @@ fun HomeScreen(navController: NavController) {
                 .verticalScroll(rememberScrollState())
                 .padding(
                     top = it.calculateTopPadding(),
-                    bottom = it.calculateBottomPadding(),
+                    bottom = it.calculateBottomPadding() + 5.dp,
                     start = 12.dp,
                     end = 12.dp
                 )
@@ -86,7 +87,7 @@ fun HomeScreen(navController: NavController) {
                     MenuItemComp(menuItem = menuItem) {
                         when (index) {
                             0 -> {
-                                //navController.navigate("")
+                                navController.navigate(Screen.CategoriesScreen.route)
                             }
 
                             1 -> {
