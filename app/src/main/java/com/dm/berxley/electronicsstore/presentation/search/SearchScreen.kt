@@ -141,8 +141,7 @@ fun SearchResultItem(product: Product) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.onPrimary)
-            .height(80.dp)
+            .background(MaterialTheme.colorScheme.onPrimary).height(80.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize()){
             Image(
