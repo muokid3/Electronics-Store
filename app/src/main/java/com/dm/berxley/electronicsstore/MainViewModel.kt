@@ -1,6 +1,7 @@
 package com.dm.berxley.electronicsstore
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -24,7 +25,7 @@ class MainViewModel @Inject constructor(
     var startDestination by mutableStateOf(Screen.AppIntroNavigator.route)
         private set
 
-    var selectedBottomIndex by mutableStateOf(0)
+    var selectedBottomIndex by mutableIntStateOf(0)
         private set
 
     init {

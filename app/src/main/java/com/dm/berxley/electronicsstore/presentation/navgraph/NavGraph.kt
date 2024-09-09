@@ -73,7 +73,7 @@ fun NavGraph(
 
 
             composable(route = Screen.SearchScreen.route) { navBackStackEntry ->
-                SearchScreen()
+                SearchScreen(navController)
             }
 
             composable(route = Screen.CheckoutScreen.route) { navBackStackEntry ->
