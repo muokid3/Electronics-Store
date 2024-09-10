@@ -36,13 +36,13 @@ import com.dm.berxley.electronicsstore.presentation.navgraph.Screen
 fun CategoriesScreen(navController: NavController) {
 
     val categories = listOf(
-        Category("All"),
-        Category("Computers"),
-        Category("Accessories"),
-        Category("Smartphones"),
-        Category("Smart Objects"),
-        Category("Speakers"),
-        Category("Scooters"),
+        Category(1,"All"),
+        Category(2,"Computers"),
+        Category(3,"Accessories"),
+        Category(4,"Smartphones"),
+        Category(5,"Smart Objects"),
+        Category(6,"Speakers"),
+        Category(7,"Scooters"),
     )
 
     Scaffold(
@@ -83,7 +83,7 @@ fun CategoriesScreen(navController: NavController) {
                     navController.navigate(
                         Screen.CategoryDetailsScreen.route.replace(
                             "{catName}",
-                            category.categoryName
+                            category.name
                         )
                     )
                 }
@@ -117,7 +117,7 @@ fun CategoryItem(category: Category, onclick: () -> Unit) {
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = category.categoryName,
+                    text = category.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )

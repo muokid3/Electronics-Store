@@ -12,56 +12,45 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.dm.berxley.electronicsstore.R
 import com.dm.berxley.electronicsstore.presentation.navgraph.Screen
 import com.dm.berxley.electronicsstore.ui.theme.primaryContainerDark
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -80,7 +69,7 @@ fun LoginScreen(navController: NavController) {
 //        }
 //    }
 
-    if (loginState.loginSuccessful){
+    if (loginState.loginSuccessful) {
         navController.navigate(Screen.CoreAppNavigator.route)
     }
 
@@ -124,9 +113,10 @@ fun LoginScreen(navController: NavController) {
             contentDescription = "Logo"
         )
 
-        OutlinedTextField(modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
             value = email,
             colors = TextFieldDefaults.colors(
                 focusedTextColor = Color.White,
@@ -224,5 +214,34 @@ fun LoginScreen(navController: NavController) {
                 Text(color = Color.White, text = "Don't have an account? Sign up!")
             }
         }
+
+
+        if (loginState.loginFailed && !loginState.errorMessage.isNullOrEmpty()) {
+            //show dialog with error here
+            ErrorDialog(errorMessage = loginState.errorMessage, loginViewModel = viewModel)
+        }
     }
+}
+
+@Composable
+fun ErrorDialog(errorMessage: String, loginViewModel: LoginViewModel) {
+
+    AlertDialog(
+        onDismissRequest = {
+            loginViewModel.resetError()
+        },
+        confirmButton = {
+            TextButton(onClick = { loginViewModel.resetError() }) {
+                Text(text = "Ok.")
+            }
+        },
+        icon = {
+            Icon(imageVector = Icons.Default.Error, contentDescription = "error")
+        },
+        title = {
+            Text(text = "An error occurred")
+        },
+        text = {
+            Text(text = errorMessage)
+        })
 }

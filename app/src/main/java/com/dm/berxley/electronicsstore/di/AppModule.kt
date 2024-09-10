@@ -2,7 +2,9 @@ package com.dm.berxley.electronicsstore.di
 
 import android.app.Application
 import com.dm.berxley.electronicsstore.data.remote.ShopApi
+import com.dm.berxley.electronicsstore.data.repositories.AuthRepositoryImpl
 import com.dm.berxley.electronicsstore.data.sharedprefs.LocalUserManagerImpl
+import com.dm.berxley.electronicsstore.domain.repositories.AuthRepository
 import com.dm.berxley.electronicsstore.domain.sharedprefs.LocalUserManager
 import dagger.Module
 import dagger.Provides
@@ -27,11 +29,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalUserManager(application: Application): LocalUserManager = LocalUserManagerImpl(application)
+    fun provideLocalUserManager(application: Application): LocalUserManager =
+        LocalUserManagerImpl(application)
 
     @Provides
     @Singleton
-    fun provideShopApi(): ShopApi{
+    fun provideShopApi(): ShopApi {
         return Retrofit.Builder()
             .baseUrl(ShopApi.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -39,5 +42,9 @@ object AppModule {
             .build()
             .create(ShopApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(shopApi: ShopApi): AuthRepository = AuthRepositoryImpl(shopApi)
 
 }
