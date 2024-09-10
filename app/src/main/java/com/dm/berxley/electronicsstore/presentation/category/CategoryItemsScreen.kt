@@ -496,7 +496,7 @@ fun ProductComp(product: Product, onClick: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth(),
                 painter = rememberAsyncImagePainter(
-                    model = product.bannerImageUrl,
+                    model = product.imageUrl,
                     placeholder = painterResource(id = R.drawable.placeholder)
                 ),
                 contentDescription = product.name

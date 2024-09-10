@@ -147,7 +147,7 @@ fun SearchResultItem(product: Product) {
             Image(
                 modifier = Modifier.align(Alignment.CenterStart),
                 painter = rememberAsyncImagePainter(
-                    model = product.bannerImageUrl,
+                    model = product.imageUrl,
                     placeholder = painterResource(id = R.drawable.placeholder)
                 ),
                 contentDescription = product.name
