@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,11 +21,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.dm.berxley.electronicsstore.domain.models.MenuItem
@@ -37,6 +40,9 @@ import com.dm.berxley.electronicsstore.presentation.onboarding.intro.components.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
+
+    val viewModel = hiltViewModel<HomeViewModel>()
+    val homeState = viewModel.homeState.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -116,19 +122,23 @@ fun HomeScreen(navController: NavController) {
             }
 
 
+            if (homeState.isLoadingCategories) {
+                //TODO show shimmer loading here
+            } else {
+                //lazyrow for sales items (categories)
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
 
-            //lazyrow for sales items
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-
-            ) {
-                items(6){
-                    SaleItemComp()
+                    ) {
+                    items(homeState.categoriesList) { category ->
+                        SaleItemComp(category)
+                    }
                 }
             }
+
 
         }
     }

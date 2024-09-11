@@ -20,10 +20,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.dm.berxley.electronicsstore.R
+import com.dm.berxley.electronicsstore.domain.models.Category
 
 @Composable
-fun SaleItemComp() {
+fun SaleItemComp(
+    category: Category
+) {
 
     Card(
         modifier = Modifier
@@ -42,7 +46,7 @@ fun SaleItemComp() {
                 .background(MaterialTheme.colorScheme.inversePrimary),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "-50%", modifier = Modifier.padding(2.dp))
+            Text(text = category.offer_message, modifier = Modifier.padding(2.dp))
         }
 
         Row(
@@ -53,8 +57,11 @@ fun SaleItemComp() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id = R.drawable.smartphone),
-                contentDescription = null
+                painter = rememberAsyncImagePainter(
+                    model = category.display_image_url,
+                    placeholder = painterResource(id = R.drawable.placeholder)
+                ),
+                contentDescription = category.name
             )
         }
 
@@ -66,7 +73,7 @@ fun SaleItemComp() {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Smartphones", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text(text = category.name, fontWeight = FontWeight.Bold, fontSize = 18.sp)
         }
 
     }

@@ -3,8 +3,10 @@ package com.dm.berxley.electronicsstore.di
 import android.app.Application
 import com.dm.berxley.electronicsstore.data.remote.ShopApi
 import com.dm.berxley.electronicsstore.data.repositories.AuthRepositoryImpl
+import com.dm.berxley.electronicsstore.data.repositories.ProductsRepositoryImpl
 import com.dm.berxley.electronicsstore.data.sharedprefs.LocalUserManagerImpl
 import com.dm.berxley.electronicsstore.domain.repositories.AuthRepository
+import com.dm.berxley.electronicsstore.domain.repositories.ProductsRepository
 import com.dm.berxley.electronicsstore.domain.sharedprefs.LocalUserManager
 import dagger.Module
 import dagger.Provides
@@ -46,5 +48,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAuthRepository(shopApi: ShopApi): AuthRepository = AuthRepositoryImpl(shopApi)
+
+    @Provides
+    @Singleton
+    fun provideProductsRepository(shopApi: ShopApi): ProductsRepository = ProductsRepositoryImpl(shopApi)
 
 }

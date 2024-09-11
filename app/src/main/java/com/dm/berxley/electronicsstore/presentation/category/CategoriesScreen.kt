@@ -36,13 +36,13 @@ import com.dm.berxley.electronicsstore.presentation.navgraph.Screen
 fun CategoriesScreen(navController: NavController) {
 
     val categories = listOf(
-        Category(1,"All"),
-        Category(2,"Computers"),
-        Category(3,"Accessories"),
-        Category(4,"Smartphones"),
-        Category(5,"Smart Objects"),
-        Category(6,"Speakers"),
-        Category(7,"Scooters"),
+        Category(1,"All", "", ""),
+        Category(2,"Computers", "", ""),
+        Category(3,"Accessories", "", ""),
+        Category(4,"Smartphones", "", ""),
+        Category(5,"Smart Objects", "", ""),
+        Category(6,"Speakers", "", ""),
+        Category(7,"Scooters", "", ""),
     )
 
     Scaffold(
