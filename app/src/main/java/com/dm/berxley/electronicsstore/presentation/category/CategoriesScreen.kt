@@ -21,11 +21,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.dm.berxley.electronicsstore.domain.models.Category
@@ -35,15 +37,8 @@ import com.dm.berxley.electronicsstore.presentation.navgraph.Screen
 @Composable
 fun CategoriesScreen(navController: NavController) {
 
-    val categories = listOf(
-        Category(1,"All", "", ""),
-        Category(2,"Computers", "", ""),
-        Category(3,"Accessories", "", ""),
-        Category(4,"Smartphones", "", ""),
-        Category(5,"Smart Objects", "", ""),
-        Category(6,"Speakers", "", ""),
-        Category(7,"Scooters", "", ""),
-    )
+    val viewModel = hiltViewModel<CategoriesViewModel>()
+    val categoriesState = viewModel.categoriesState.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -66,27 +61,33 @@ fun CategoriesScreen(navController: NavController) {
         }
     ) {
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    top = it.calculateTopPadding(),
-                    bottom = it.calculateBottomPadding() + 5.dp,
-                    start = 12.dp,
-                    end = 12.dp
-                ),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(categories) { category ->
-                CategoryItem(category = category) {
-                    //navigate to the category
-                    navController.navigate(
-                        Screen.CategoryDetailsScreen.route.replace(
-                            "{catName}",
-                            category.name
+        if (categoriesState.isLoadingCategories) {
+            // TODO: show shimmer layout here
+
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = it.calculateTopPadding(),
+                        bottom = it.calculateBottomPadding() + 5.dp,
+                        start = 12.dp,
+                        end = 12.dp
+                    ),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(categoriesState.categoriesList) { category ->
+                    CategoryItem(category = category) {
+                        //navigate to the category
+                        navController.navigate(
+                            Screen.CategoryDetailsScreen.route.replace(
+                                "{catName}",
+                                category.name
+                            )
                         )
-                    )
+                    }
                 }
+
             }
 
         }
