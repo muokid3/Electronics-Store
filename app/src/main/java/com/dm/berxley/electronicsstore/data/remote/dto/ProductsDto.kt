@@ -8,5 +8,6 @@ data class ProductsDto(
     val products: List<Product>,
     val success: Boolean,
     val totalItems: Int,
-    val totalPages: Int
+    val totalPages: Int,
+    val message: String?
 )

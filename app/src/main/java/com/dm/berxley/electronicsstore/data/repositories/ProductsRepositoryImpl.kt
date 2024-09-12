@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class ProductsRepositoryImpl @Inject constructor(
     private val shopApi: ShopApi
-): ProductsRepository {
+) : ProductsRepository {
     override suspend fun getProductCategories(): Flow<Response<CategoriesDto>> {
         return flow {
             val categoriesResponse = shopApi.getCategories(accessToken = "Random access token here")
@@ -21,6 +21,13 @@ class ProductsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getProductsInCategory(categoryId: Int): Flow<Response<ProductsDto>> {
-        TODO("Not yet implemented")
+        return flow {
+            val products = shopApi.getProducts(
+                accessToken = "Random access token here",
+                //categoryId = categoryId //we won't pass the ID because we are using a dummy API that does not accept dynamic paths
+            )
+            emit(products)
+            return@flow
+        }
     }
 }

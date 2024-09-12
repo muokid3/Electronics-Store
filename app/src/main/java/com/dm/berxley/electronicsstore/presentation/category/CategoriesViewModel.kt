@@ -70,4 +70,45 @@ class CategoriesViewModel @Inject constructor(
             it.copy(selectedCategory = category)
         }
     }
+
+    fun loadCategoryProducts(categoryId: Int){
+
+        _categoriesState.update {
+            it.copy(isLoadingProducts = true, productsErrorMessage = null)
+        }
+        viewModelScope.launch {
+            productsRepository.getProductsInCategory(categoryId).collectLatest { response->
+
+                if (response.isSuccessful){
+                    if (response.body()?.success == true){
+                        val products = response.body()?.products
+
+                        //TODO persist products to Room DB
+
+                        _categoriesState.update {
+                            it.copy(isLoadingProducts = false, productsErrorMessage = null, selectedCategoryProducts = products!!)
+                        }
+                    }else{
+                        //api returned error
+                        val errorMessage = response.body()?.message ?: "Unknown API error"
+
+                        _categoriesState.update {
+                            it.copy(isLoadingProducts = false, productsErrorMessage = errorMessage)
+                        }
+                    }
+
+
+                }else{
+                    val httpErrorCode = response.code()
+                    val httpErrorMessage = response.message()
+                    val errorMessage = "Error $httpErrorCode: $httpErrorMessage"
+
+                    _categoriesState.update {
+                        it.copy(isLoadingProducts = false, productsErrorMessage = errorMessage)
+                    }
+                }
+
+            }
+        }
+    }
 }
