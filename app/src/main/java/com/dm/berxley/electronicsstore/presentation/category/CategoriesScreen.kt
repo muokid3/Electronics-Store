@@ -24,20 +24,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.dm.berxley.electronicsstore.domain.models.Category
 import com.dm.berxley.electronicsstore.presentation.navgraph.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesScreen(navController: NavController) {
+fun CategoriesScreen(navController: NavController, viewModel: CategoriesViewModel) {
 
-    val viewModel = hiltViewModel<CategoriesViewModel>()
     val categoriesState = viewModel.categoriesState.collectAsState().value
 
     Scaffold(
@@ -78,12 +74,10 @@ fun CategoriesScreen(navController: NavController) {
             ) {
                 items(categoriesState.categoriesList) { category ->
                     CategoryItem(category = category) {
+                        viewModel.setSelectedCategory(category)
                         //navigate to the category
                         navController.navigate(
-                            Screen.CategoryDetailsScreen.route.replace(
-                                "{catName}",
-                                category.name
-                            )
+                            Screen.CategoryDetailsScreen.route
                         )
                     }
                 }
@@ -132,10 +126,4 @@ fun CategoryItem(category: Category, onclick: () -> Unit) {
     }
 
 
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    CategoriesScreen(rememberNavController())
 }

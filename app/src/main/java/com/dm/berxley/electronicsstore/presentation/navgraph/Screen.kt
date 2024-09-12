@@ -12,7 +12,7 @@ sealed class Screen(val route: String) {
 
     object HomeScreen: Screen(route = "homeScreen")
     object CategoriesScreen: Screen(route = "categoriesScreen")
-    object CategoryDetailsScreen: Screen(route = "categoryDetailsScreen/{catName}")
+    object CategoryDetailsScreen: Screen(route = "categoryDetailsScreen")
     object SearchScreen: Screen(route = "searchScreen")
     object CheckoutScreen: Screen(route = "checkoutScreen")
     object AccountScreen: Screen(route = "accountScreen")

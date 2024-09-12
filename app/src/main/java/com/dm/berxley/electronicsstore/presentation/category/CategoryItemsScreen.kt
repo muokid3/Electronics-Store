@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -25,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -40,7 +40,12 @@ import com.dm.berxley.electronicsstore.domain.models.Product
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryItemsScreen(catName: String, navController: NavController) {
+fun CategoryItemsScreen(
+    navController: NavController,
+    viewModel: CategoriesViewModel
+) {
+
+    val categoryState = viewModel.categoriesState.collectAsState().value
 
     val productsList = listOf(
         Product(
@@ -429,10 +434,12 @@ fun CategoryItemsScreen(catName: String, navController: NavController) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = catName,
-                        fontWeight = FontWeight.Bold
-                    )
+                    categoryState.selectedCategory?.name?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
@@ -491,7 +498,7 @@ fun ProductComp(product: Product, onClick: () -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
 
         ) {
-        Box(modifier = Modifier.fillMaxSize()){
+        Box(modifier = Modifier.fillMaxSize()) {
             Image(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -515,13 +522,4 @@ fun ProductComp(product: Product, onClick: () -> Unit) {
         }
     }
 
-}
-
-@Preview
-@Composable
-fun PreviewList() {
-    CategoryItemsScreen(
-        "Category name here, extract from params",
-        navController = rememberNavController()
-    )
 }

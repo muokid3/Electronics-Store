@@ -2,6 +2,7 @@ package com.dm.berxley.electronicsstore.presentation.category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dm.berxley.electronicsstore.domain.models.Category
 import com.dm.berxley.electronicsstore.domain.repositories.ProductsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,6 +61,13 @@ class CategoriesViewModel @Inject constructor(
                 }
 
             }
+        }
+    }
+
+
+    fun setSelectedCategory(category: Category){
+        _categoriesState.update {
+            it.copy(selectedCategory = category)
         }
     }
 }

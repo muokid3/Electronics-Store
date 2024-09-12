@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -11,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.dm.berxley.electronicsstore.presentation.account.AccountScreen
 import com.dm.berxley.electronicsstore.presentation.category.CategoriesScreen
+import com.dm.berxley.electronicsstore.presentation.category.CategoriesViewModel
 import com.dm.berxley.electronicsstore.presentation.category.CategoryItemsScreen
 import com.dm.berxley.electronicsstore.presentation.checkout.CheckoutScreen
 import com.dm.berxley.electronicsstore.presentation.home.HomeScreen
@@ -25,6 +27,8 @@ fun NavGraph(
     startDestination: String,
     paddingValues: PaddingValues
 ) {
+    val categoriesViewModel = hiltViewModel<CategoriesViewModel>()
+
     NavHost(
         navController = navController as NavHostController,
         startDestination = startDestination,
@@ -61,13 +65,13 @@ fun NavGraph(
             }
 
             composable(route = Screen.CategoriesScreen.route) { navBackStackEntry ->
-                CategoriesScreen(navController)
+                CategoriesScreen(navController = navController, viewModel = categoriesViewModel)
             }
             composable(route = Screen.CategoryDetailsScreen.route) { navBackStackEntry ->
-                val catName = navBackStackEntry.arguments?.getString("catName")
-                catName?.let {
-                    CategoryItemsScreen(catName = catName, navController)
-                }
+                CategoryItemsScreen(
+                    navController = navController,
+                    viewModel = categoriesViewModel
+                )
             }
 
 
