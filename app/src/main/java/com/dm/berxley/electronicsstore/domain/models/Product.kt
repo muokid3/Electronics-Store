@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Product(
     @PrimaryKey val id: Int,
+    val category_id: Int,
     val name: String,
     val description: String,
     val price: Double,

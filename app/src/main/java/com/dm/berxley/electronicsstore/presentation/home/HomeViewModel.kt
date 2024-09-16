@@ -20,35 +20,42 @@ class HomeViewModel @Inject constructor(
     val homeState = _homeState.asStateFlow()
 
     init {
+
         _homeState.update {
             it.copy(isLoadingCategories = true)
         }
+        loadCategoriesFromRoom()
         loadCategories()
     }
 
     private fun loadCategories() {
         viewModelScope.launch {
             productsRepository.getProductCategories().collectLatest { response ->
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
 
-                    if (response.body()?.success == true){
+                    if (response.body()?.success == true) {
                         val categories = response.body()?.categories
 
-                        //TODO persist categories to Room DB
+                        for (category in categories!!) {
+                            productsRepository.upsertCategory(category)
+                        }
 
                         _homeState.update {
-                            it.copy(isLoadingCategories = false, categoriesErrorMessage = null, categoriesList = categories!!)
+                            it.copy(isLoadingCategories = false, categoriesErrorMessage = null)
                         }
-                    }else{
+                    } else {
                         //api returned error
                         val errorMessage = response.body()?.message ?: "Unknown API error"
 
                         _homeState.update {
-                            it.copy(isLoadingCategories = false, categoriesErrorMessage = errorMessage)
+                            it.copy(
+                                isLoadingCategories = false,
+                                categoriesErrorMessage = errorMessage
+                            )
                         }
                     }
 
-                }else{
+                } else {
                     val httpErrorCode = response.code()
                     val httpErrorMessage = response.message()
                     val errorMessage = "Error $httpErrorCode: $httpErrorMessage"
@@ -56,6 +63,20 @@ class HomeViewModel @Inject constructor(
                     _homeState.update {
                         it.copy(isLoadingCategories = false, categoriesErrorMessage = errorMessage)
                     }
+                }
+            }
+        }
+    }
+
+    private fun loadCategoriesFromRoom() {
+        viewModelScope.launch {
+            productsRepository.getCategories().collectLatest { categoryList ->
+
+                _homeState.update {
+                    it.copy(
+                        isLoadingCategories = false,
+                        categoriesList = categoryList
+                    )
                 }
             }
         }

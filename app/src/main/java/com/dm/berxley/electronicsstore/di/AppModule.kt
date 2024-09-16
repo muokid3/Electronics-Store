@@ -2,6 +2,7 @@ package com.dm.berxley.electronicsstore.di
 
 import android.app.Application
 import androidx.room.Room
+import com.dm.berxley.electronicsstore.data.local.ImagesListConverter
 import com.dm.berxley.electronicsstore.data.local.StoreDao
 import com.dm.berxley.electronicsstore.data.local.StoreDatabase
 import com.dm.berxley.electronicsstore.data.remote.ShopApi
@@ -66,6 +67,7 @@ object AppModule {
             klass = StoreDatabase::class.java,
             name = StoreDatabase.ROOM_DB_NAME
         )
+            .addTypeConverter(ImagesListConverter())
             .fallbackToDestructiveMigration()
             .build()
     }

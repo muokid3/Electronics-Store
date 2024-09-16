@@ -56,8 +56,8 @@ class ProductsRepositoryImpl @Inject constructor(
        storeDao.deleteProduct(product)
     }
 
-    override fun getProducts(): Flow<List<Product>> {
-        return storeDao.getProducts()
+    override fun roomGetProductsInCategory(categoryId: Int): Flow<List<Product>> {
+        return storeDao.getProducts(categoryId)
     }
 
     override suspend fun upsertUser(user: User) {

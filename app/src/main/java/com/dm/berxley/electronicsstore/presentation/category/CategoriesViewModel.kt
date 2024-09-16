@@ -8,7 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val productsRepository: ProductsRepository
-): ViewModel() {
+) : ViewModel() {
     private val _categoriesState = MutableStateFlow(CategoryState())
     val categoriesState = _categoriesState.asStateFlow()
 
@@ -26,31 +25,37 @@ class CategoriesViewModel @Inject constructor(
         }
 
         loadCategories()
+        loadCategoriesFromRoom()
     }
 
     private fun loadCategories() {
         viewModelScope.launch {
-            productsRepository.getProductCategories().collectLatest {response->
-                if (response.isSuccessful){
+            productsRepository.getProductCategories().collectLatest { response ->
+                if (response.isSuccessful) {
 
-                    if (response.body()?.success == true){
+                    if (response.body()?.success == true) {
                         val categories = response.body()?.categories
 
-                        //TODO persist categories to Room DB
+                        for (category in categories!!) {
+                            productsRepository.upsertCategory(category)
+                        }
 
                         _categoriesState.update {
-                            it.copy(isLoadingCategories = false, categoriesErrorMessage = null, categoriesList = categories!!)
+                            it.copy(isLoadingCategories = false, categoriesErrorMessage = null)
                         }
-                    }else{
+                    } else {
                         //api returned error
                         val errorMessage = response.body()?.message ?: "Unknown API error"
 
                         _categoriesState.update {
-                            it.copy(isLoadingCategories = false, categoriesErrorMessage = errorMessage)
+                            it.copy(
+                                isLoadingCategories = false,
+                                categoriesErrorMessage = errorMessage
+                            )
                         }
                     }
 
-                }else{
+                } else {
                     val httpErrorCode = response.code()
                     val httpErrorMessage = response.message()
                     val errorMessage = "Error $httpErrorCode: $httpErrorMessage"
@@ -64,31 +69,49 @@ class CategoriesViewModel @Inject constructor(
         }
     }
 
+    private fun loadCategoriesFromRoom() {
+        viewModelScope.launch {
+            productsRepository.getCategories().collectLatest { categoryList ->
 
-    fun setSelectedCategory(category: Category){
-        _categoriesState.update {
-            it.copy(selectedCategory = category)
+                _categoriesState.update {
+                    it.copy(
+                        isLoadingCategories = false,
+                        categoriesList = categoryList
+                    )
+                }
+            }
         }
     }
 
-    fun loadCategoryProducts(categoryId: Int){
+
+    fun setSelectedCategory(category: Category) {
+        _categoriesState.update {
+            it.copy(selectedCategory = category, selectedCategoryProducts = emptyList())
+        }
+        loadCategoryProducts(category.id)
+        loadCategoryProductsFromRoom(category.id)
+    }
+
+    private fun loadCategoryProducts(categoryId: Int) {
 
         _categoriesState.update {
             it.copy(isLoadingProducts = true, productsErrorMessage = null)
         }
         viewModelScope.launch {
-            productsRepository.getProductsInCategory(categoryId).collectLatest { response->
+            productsRepository.getProductsInCategory(categoryId).collectLatest { response ->
 
-                if (response.isSuccessful){
-                    if (response.body()?.success == true){
+                if (response.isSuccessful) {
+                    if (response.body()?.success == true) {
                         val products = response.body()?.products
 
-                        //TODO persist products to Room DB
+                        for (product in products!!) {
+                            productsRepository.upsertProduct(product)
+                        }
 
                         _categoriesState.update {
-                            it.copy(isLoadingProducts = false, productsErrorMessage = null, selectedCategoryProducts = products!!)
+                            it.copy(isLoadingProducts = false, productsErrorMessage = null)
                         }
-                    }else{
+                    } else {
                         //api returned error
                         val errorMessage = response.body()?.message ?: "Unknown API error"
 
@@ -98,7 +121,7 @@ class CategoriesViewModel @Inject constructor(
                     }
 
 
-                }else{
+                } else {
                     val httpErrorCode = response.code()
                     val httpErrorMessage = response.message()
                     val errorMessage = "Error $httpErrorCode: $httpErrorMessage"
@@ -108,6 +131,27 @@ class CategoriesViewModel @Inject constructor(
                     }
                 }
 
+            }
+        }
+    }
+
+
+    private fun loadCategoryProductsFromRoom(categoryId: Int) {
+
+        _categoriesState.update {
+            it.copy(isLoadingProducts = true, productsErrorMessage = null)
+        }
+
+        viewModelScope.launch {
+
+            productsRepository.roomGetProductsInCategory(categoryId).collectLatest { productList ->
+                _categoriesState.update {
+                    it.copy(
+                        isLoadingProducts = false,
+                        productsErrorMessage = null,
+                        selectedCategoryProducts = productList
+                    )
+                }
             }
         }
     }

@@ -25,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +46,14 @@ fun CategoryItemsScreen(
 ) {
 
     val categoryState = viewModel.categoriesState.collectAsState().value
-    categoryState.selectedCategory?.let { viewModel.loadCategoryProducts(it.id) }
+
+    categoryState.selectedCategory?.let {
+        LaunchedEffect(key1 = Unit){
+            viewModel.setSelectedCategory(it)
+        }
+    }
+
+
 
 
     Scaffold(

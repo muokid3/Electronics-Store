@@ -23,8 +23,8 @@ interface StoreDao {
     suspend fun upsertProduct(product: Product)
     @Delete
     suspend fun deleteProduct(product: Product)
-    @Query("SELECT * FROM Product")
-    fun getProducts(): Flow<List<Product>>
+    @Query("SELECT * FROM Product WHERE category_id = :categoryId")
+    fun getProducts(categoryId: Int): Flow<List<Product>>
 
     @Upsert
     suspend fun upsertUser(user: User)

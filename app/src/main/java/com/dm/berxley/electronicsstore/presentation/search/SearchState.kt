@@ -7,6 +7,7 @@ data class SearchState(
     val searchResults: List<Product> = listOf(
         Product(
             1,
+            1,
             "Surface laptop 3",
             "The Surface Laptop 3 with an Intel Core i7 10th Gen processor, 16GB RAM, and a 512GB SSD is a powerful device. It comes with a 13.5-inch PixelSense touchscreen display with a resolution of 2256 x 1504 pixels. It features Intel Iris Plus Graphics, which provide decent performance for most everyday tasks and even some light gaming.\n" +
                     "\n" +
@@ -30,6 +31,7 @@ data class SearchState(
             )
         ),
         Product(
+            2,
             2,
             "745 G6 i5 16/512 Ryzen 7",
             "The 745 G6 i5 Ryzen 7 is a business-class laptop designed for professionals who demand performance, security, and manageability in a sleek and portable package. Featuring a powerful combination of Intel and AMD processors, ample memory, and fast storage, this laptop is built to handle multitasking, productivity, and business applications with ease.\n" +
@@ -56,6 +58,7 @@ data class SearchState(
             )
         ),
         Product(
+            3,
             3,
             "Dragonfly i5 16/512",
             "The HP Elite Dragonfly is an ultra-light, premium business laptop, ideal for professionals who need a powerful, secure, and highly portable device.\n" +
@@ -119,6 +122,7 @@ data class SearchState(
                 )
         ),
         Product(
+            4,
             4,
             "Hp 1030 G3 x360 8th corei5 16GB 256ssd Touch",
             "The HP EliteBook x360 1030 G3 is a high-end business laptop known for its versatility and premium build quality. Here’s an overview of its specifications based on the model with an 8th generation Intel Core i5, 16GB RAM, and 256GB SSD:\n" +
@@ -197,6 +201,7 @@ data class SearchState(
         ),
         Product(
             5,
+            5,
             "Surface laptop 3",
             "The Surface Laptop 3 with an Intel Core i7 10th Gen processor, 16GB RAM, and a 512GB SSD is a powerful device. It comes with a 13.5-inch PixelSense touchscreen display with a resolution of 2256 x 1504 pixels. It features Intel Iris Plus Graphics, which provide decent performance for most everyday tasks and even some light gaming.\n" +
                     "\n" +
@@ -221,6 +226,7 @@ data class SearchState(
         ),
         Product(
             6,
+            1,
             "745 G6 i5 16/512 Ryzen 7",
             "The 745 G6 i5 Ryzen 7 is a business-class laptop designed for professionals who demand performance, security, and manageability in a sleek and portable package. Featuring a powerful combination of Intel and AMD processors, ample memory, and fast storage, this laptop is built to handle multitasking, productivity, and business applications with ease.\n" +
                     "\n" +
@@ -247,6 +253,7 @@ data class SearchState(
         ),
         Product(
             7,
+            2,
             "Dragonfly i5 16/512",
             "The HP Elite Dragonfly is an ultra-light, premium business laptop, ideal for professionals who need a powerful, secure, and highly portable device.\n" +
                     "\n" +
@@ -310,6 +317,7 @@ data class SearchState(
         ),
         Product(
             8,
+            3,
             "Hp 1030 G3 x360 8th corei5 16GB 256ssd Touch",
             "The HP EliteBook x360 1030 G3 is a high-end business laptop known for its versatility and premium build quality. Here’s an overview of its specifications based on the model with an 8th generation Intel Core i5, 16GB RAM, and 256GB SSD:\n" +
                     "\n" +
