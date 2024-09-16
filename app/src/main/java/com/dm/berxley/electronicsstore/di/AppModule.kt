@@ -1,6 +1,9 @@
 package com.dm.berxley.electronicsstore.di
 
 import android.app.Application
+import androidx.room.Room
+import com.dm.berxley.electronicsstore.data.local.StoreDao
+import com.dm.berxley.electronicsstore.data.local.StoreDatabase
 import com.dm.berxley.electronicsstore.data.remote.ShopApi
 import com.dm.berxley.electronicsstore.data.repositories.AuthRepositoryImpl
 import com.dm.berxley.electronicsstore.data.repositories.ProductsRepositoryImpl
@@ -51,6 +54,24 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideProductsRepository(shopApi: ShopApi): ProductsRepository = ProductsRepositoryImpl(shopApi)
+    fun provideProductsRepository(shopApi: ShopApi, storeDao: StoreDao): ProductsRepository =
+        ProductsRepositoryImpl(shopApi, storeDao)
+
+
+    @Provides
+    @Singleton
+    fun provideRoomDatabase(application: Application): StoreDatabase {
+        return Room.databaseBuilder(
+            context = application,
+            klass = StoreDatabase::class.java,
+            name = StoreDatabase.ROOM_DB_NAME
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesRoomDao(storeDatabase: StoreDatabase): StoreDao = storeDatabase.storeDao
 
 }

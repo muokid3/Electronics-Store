@@ -1,8 +1,12 @@
 package com.dm.berxley.electronicsstore.data.repositories
 
+import com.dm.berxley.electronicsstore.data.local.StoreDao
 import com.dm.berxley.electronicsstore.data.remote.ShopApi
 import com.dm.berxley.electronicsstore.data.remote.dto.CategoriesDto
 import com.dm.berxley.electronicsstore.data.remote.dto.ProductsDto
+import com.dm.berxley.electronicsstore.domain.models.Category
+import com.dm.berxley.electronicsstore.domain.models.Product
+import com.dm.berxley.electronicsstore.domain.models.User
 import com.dm.berxley.electronicsstore.domain.repositories.ProductsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -10,7 +14,8 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class ProductsRepositoryImpl @Inject constructor(
-    private val shopApi: ShopApi
+    private val shopApi: ShopApi,
+    private val storeDao: StoreDao
 ) : ProductsRepository {
     override suspend fun getProductCategories(): Flow<Response<CategoriesDto>> {
         return flow {
@@ -29,5 +34,41 @@ class ProductsRepositoryImpl @Inject constructor(
             emit(products)
             return@flow
         }
+    }
+
+    override suspend fun upsertCategory(category: Category) {
+        storeDao.upsertCategory(category)
+    }
+
+    override suspend fun deleteCategory(category: Category) {
+        storeDao.deleteCategory(category)
+    }
+
+    override fun getCategories(): Flow<List<Category>> {
+        return storeDao.getCategories()
+    }
+
+    override suspend fun upsertProduct(product: Product) {
+        storeDao.upsertProduct(product)
+    }
+
+    override suspend fun deleteProduct(product: Product) {
+       storeDao.deleteProduct(product)
+    }
+
+    override fun getProducts(): Flow<List<Product>> {
+        return storeDao.getProducts()
+    }
+
+    override suspend fun upsertUser(user: User) {
+        storeDao.upsertUser(user)
+    }
+
+    override suspend fun deleteUser(user: User) {
+        storeDao.deleteUser(user)
+    }
+
+    override fun getUser(): Flow<User> {
+        return storeDao.getUser()
     }
 }
