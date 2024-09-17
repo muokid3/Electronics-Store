@@ -22,7 +22,7 @@ interface ShopApi {
 
     @Headers("Content-Type: application/json")
     //@GET("products/{id}") //in a real api, retrofit will override this id
-    @GET("71677267-186a-4ff9-b9f6-ccf659559890") //this calls a dummy api that can not take dynamic paths
+    @GET("b24caa95-e0c0-494d-b233-f82a64c7f0e8") //this calls a dummy api that can not take dynamic paths
     suspend fun getProducts(
         @Header("Authorization") accessToken: String,
         //@Path("id") categoryId: Int // in a real api, we will get the passed ID here

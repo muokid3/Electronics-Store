@@ -4,16 +4,16 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.dm.berxley.electronicsstore.presentation.account.AccountScreen
 import com.dm.berxley.electronicsstore.presentation.category.CategoriesScreen
-import com.dm.berxley.electronicsstore.presentation.category.CategoriesViewModel
-import com.dm.berxley.electronicsstore.presentation.category.CategoryItemsScreen
+import com.dm.berxley.electronicsstore.presentation.categoryItems.CategoryItemsScreen
 import com.dm.berxley.electronicsstore.presentation.checkout.CheckoutScreen
 import com.dm.berxley.electronicsstore.presentation.home.HomeScreen
 import com.dm.berxley.electronicsstore.presentation.onboarding.intro.IntroScreen
@@ -27,7 +27,6 @@ fun NavGraph(
     startDestination: String,
     paddingValues: PaddingValues
 ) {
-    val categoriesViewModel = hiltViewModel<CategoriesViewModel>()
 
     NavHost(
         navController = navController as NavHostController,
@@ -65,13 +64,13 @@ fun NavGraph(
             }
 
             composable(route = Screen.CategoriesScreen.route) { navBackStackEntry ->
-                CategoriesScreen(navController = navController, viewModel = categoriesViewModel)
+                CategoriesScreen(navController = navController)
             }
-            composable(route = Screen.CategoryDetailsScreen.route) { navBackStackEntry ->
-                CategoryItemsScreen(
-                    navController = navController,
-                    viewModel = categoriesViewModel
-                )
+            composable(
+                route = Screen.CategoryDetailsScreen.route,
+                arguments = listOf(navArgument("categoryId") { type = NavType.IntType })
+            ) { navBackStackEntry ->
+                CategoryItemsScreen(navController = navController)
             }
 
 

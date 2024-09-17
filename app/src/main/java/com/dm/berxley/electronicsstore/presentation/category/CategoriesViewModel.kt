@@ -24,11 +24,22 @@ class CategoriesViewModel @Inject constructor(
             it.copy(isLoadingCategories = true)
         }
 
-        loadCategories()
-        loadCategoriesFromRoom()
+        viewModelScope.launch {
+            productsRepository.getCategories().collectLatest { categoryList ->
+
+                _categoriesState.update {
+                    it.copy(
+                        isLoadingCategories = false,
+                        categoriesList = categoryList
+                    )
+                }
+            }
+        }
+
+        loadCategoriesFromApi()
     }
 
-    private fun loadCategories() {
+    private fun loadCategoriesFromApi() {
         viewModelScope.launch {
             productsRepository.getProductCategories().collectLatest { response ->
                 if (response.isSuccessful) {
@@ -65,93 +76,6 @@ class CategoriesViewModel @Inject constructor(
                     }
                 }
 
-            }
-        }
-    }
-
-    private fun loadCategoriesFromRoom() {
-        viewModelScope.launch {
-            productsRepository.getCategories().collectLatest { categoryList ->
-
-                _categoriesState.update {
-                    it.copy(
-                        isLoadingCategories = false,
-                        categoriesList = categoryList
-                    )
-                }
-            }
-        }
-    }
-
-
-    fun setSelectedCategory(category: Category) {
-        _categoriesState.update {
-            it.copy(selectedCategory = category, selectedCategoryProducts = emptyList())
-        }
-        loadCategoryProducts(category.id)
-        loadCategoryProductsFromRoom(category.id)
-    }
-
-    private fun loadCategoryProducts(categoryId: Int) {
-
-        _categoriesState.update {
-            it.copy(isLoadingProducts = true, productsErrorMessage = null)
-        }
-        viewModelScope.launch {
-            productsRepository.getProductsInCategory(categoryId).collectLatest { response ->
-
-                if (response.isSuccessful) {
-                    if (response.body()?.success == true) {
-                        val products = response.body()?.products
-
-                        for (product in products!!) {
-                            productsRepository.upsertProduct(product)
-                        }
-
-                        _categoriesState.update {
-                            it.copy(isLoadingProducts = false, productsErrorMessage = null)
-                        }
-                    } else {
-                        //api returned error
-                        val errorMessage = response.body()?.message ?: "Unknown API error"
-
-                        _categoriesState.update {
-                            it.copy(isLoadingProducts = false, productsErrorMessage = errorMessage)
-                        }
-                    }
-
-
-                } else {
-                    val httpErrorCode = response.code()
-                    val httpErrorMessage = response.message()
-                    val errorMessage = "Error $httpErrorCode: $httpErrorMessage"
-
-                    _categoriesState.update {
-                        it.copy(isLoadingProducts = false, productsErrorMessage = errorMessage)
-                    }
-                }
-
-            }
-        }
-    }
-
-
-    private fun loadCategoryProductsFromRoom(categoryId: Int) {
-
-        _categoriesState.update {
-            it.copy(isLoadingProducts = true, productsErrorMessage = null)
-        }
-
-        viewModelScope.launch {
-
-            productsRepository.roomGetProductsInCategory(categoryId).collectLatest { productList ->
-                _categoriesState.update {
-                    it.copy(
-                        isLoadingProducts = false,
-                        productsErrorMessage = null,
-                        selectedCategoryProducts = productList
-                    )
-                }
             }
         }
     }

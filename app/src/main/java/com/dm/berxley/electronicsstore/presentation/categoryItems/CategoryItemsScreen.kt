@@ -1,4 +1,4 @@
-package com.dm.berxley.electronicsstore.presentation.category
+package com.dm.berxley.electronicsstore.presentation.categoryItems
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.dm.berxley.electronicsstore.R
@@ -42,17 +42,15 @@ import com.dm.berxley.electronicsstore.domain.models.Product
 @Composable
 fun CategoryItemsScreen(
     navController: NavController,
-    viewModel: CategoriesViewModel
 ) {
 
-    val categoryState = viewModel.categoriesState.collectAsState().value
+    val viewModel = hiltViewModel<CategoryItemsViewModel>()
+    val categoryState = viewModel.categoryItemsState.collectAsState().value
 
-    categoryState.selectedCategory?.let {
-        LaunchedEffect(key1 = Unit){
-            viewModel.setSelectedCategory(it)
-        }
+    LaunchedEffect(key1 = Unit){
+        viewModel.getCategory()
+        viewModel.getProducts()
     }
-
 
 
 

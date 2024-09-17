@@ -19,9 +19,10 @@ interface ProductsRepository {
     suspend fun upsertCategory(category: Category)
     suspend fun deleteCategory(category: Category)
     fun getCategories(): Flow<List<Category>>
+    suspend fun getCategoryById(id: Int): Category
     suspend fun upsertProduct(product: Product)
     suspend fun deleteProduct(product: Product)
-    fun roomGetProductsInCategory(categoryId: Int): Flow<List<Product>>
+    suspend fun roomGetProductsInCategory(categoryId: Int): Flow<List<Product>>
 
     suspend fun upsertUser(user: User)
     suspend fun deleteUser(user: User)

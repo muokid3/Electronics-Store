@@ -48,6 +48,10 @@ class ProductsRepositoryImpl @Inject constructor(
         return storeDao.getCategories()
     }
 
+    override suspend fun getCategoryById(id: Int): Category {
+        return storeDao.getCategoryById(id)
+    }
+
     override suspend fun upsertProduct(product: Product) {
         storeDao.upsertProduct(product)
     }
@@ -56,7 +60,7 @@ class ProductsRepositoryImpl @Inject constructor(
        storeDao.deleteProduct(product)
     }
 
-    override fun roomGetProductsInCategory(categoryId: Int): Flow<List<Product>> {
+    override suspend fun roomGetProductsInCategory(categoryId: Int): Flow<List<Product>> {
         return storeDao.getProducts(categoryId)
     }
 
